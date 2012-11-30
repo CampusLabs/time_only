@@ -1,4 +1,6 @@
 class TimeOfDay
+  include Comparable
+
   SECONDS_PER_MIN  = 60
   SECONDS_PER_HOUR = 60 * SECONDS_PER_MIN
   SECONDS_PER_DAY  = 24 * SECONDS_PER_HOUR
