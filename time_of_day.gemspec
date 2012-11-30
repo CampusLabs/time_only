@@ -1,5 +1,5 @@
 # -*- encoding: utf-8 -*-
-require File.expand_path('../lib/time_of_day', __FILE__)
+require File.expand_path('../lib/time_of_day/version', __FILE__)
 
 Gem::Specification.new do |gem|
   gem.name          = 'time_of_day'

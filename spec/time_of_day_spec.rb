@@ -1,4 +1,5 @@
 require 'rspec'
+require 'time_of_day'
 
 describe TimeOfDay do
   describe '.new(args)' do
