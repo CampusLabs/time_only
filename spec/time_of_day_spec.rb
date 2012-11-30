@@ -1,4 +1,5 @@
 require 'rspec'
+require 'timecop'
 require 'time_of_day'
 
 describe TimeOfDay do
@@ -39,6 +40,12 @@ describe TimeOfDay do
   end
 
   describe '.now' do
+    it "returns a #{described_class} object for the current system time" do
+      hour, min, sec = 12, 34, 56
+      Timecop.freeze(Time.local(2012, 11, 30, hour, min, sec)) do
+        expect(described_class.now.to_s).to eq('12:34:56')
+      end
+    end
   end
 
   describe '#+(seconds)' do

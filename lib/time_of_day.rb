@@ -10,6 +10,9 @@ class TimeOfDay
   end
 
   def self.now
+    time = Time.now
+
+    new(time.hour, time.min, time.sec)
   end
 
   def initialize(*args)
