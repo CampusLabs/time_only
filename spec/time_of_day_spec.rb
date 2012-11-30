@@ -13,11 +13,27 @@ describe TimeOfDay do
     it 'raises an error when the wrong number of arguments is passed' do
       expect{ described_class.new(1, 2) }.to raise_error(ArgumentError)
     end
+
+    it "rolls over seconds that are greater than #{described_class::SECONDS_PER_DAY}" do
+      expect(described_class.new(described_class::SECONDS_PER_DAY * 2 + 1).to_i).to eq(1)
+    end
+
+    it 'handles negative seconds which rolls back' do
+      expect(described_class.new(-10).to_i).to eq(described_class::SECONDS_PER_DAY - 10)
+    end
   end
 
   describe '.at(seconds)' do
     it 'creates a time based on the number of seconds since midnight' do
       expect(described_class.at(300).to_i).to eq(300)
+    end
+
+    it "rolls over seconds that are greater than #{described_class::SECONDS_PER_DAY}" do
+      expect(described_class.at(described_class::SECONDS_PER_DAY * 2 + 1).to_i).to eq(1)
+    end
+
+    it 'handles negative seconds which rolls back' do
+      expect(described_class.at(-10).to_i).to eq(described_class::SECONDS_PER_DAY - 10)
     end
   end
 
@@ -32,6 +48,10 @@ describe TimeOfDay do
       expect(current_time).not_to equal(new_time)
       expect(new_time).to eq(described_class.new(1))
     end
+
+    it 'rolls over time when greater than 23:59:59' do
+      expect(described_class.new(23, 59, 59) + 2).to eq(described_class.new(0, 0, 1))
+    end
   end
 
   describe '#-(seconds)' do
@@ -41,6 +61,10 @@ describe TimeOfDay do
 
       expect(current_time).not_to equal(new_time)
       expect(new_time).to eq(described_class.new(0))
+    end
+
+    it 'rolls back time when less than 00:00:00' do
+      expect(described_class.new(00, 00, 01) - 2).to eq(described_class.new(23, 59, 59))
     end
   end
 
@@ -102,6 +126,10 @@ describe TimeOfDay do
 
       expect(current_time).not_to equal(new_time)
       expect(new_time).to eq(described_class.new(1))
+    end
+
+    it 'rolls over time when greater than 23:59:59' do
+      expect(described_class.new(23, 59, 59).succ).to eq(described_class.new(0, 0, 0))
     end
   end
 

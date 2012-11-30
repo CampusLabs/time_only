@@ -1,8 +1,9 @@
 class TimeOfDay
   VERSION = '1.0.0'
 
-  SECONDS_PER_HOUR = 3600
   SECONDS_PER_MIN  = 60
+  SECONDS_PER_HOUR = 60 * SECONDS_PER_MIN
+  SECONDS_PER_DAY  = 24 * SECONDS_PER_HOUR
 
   def self.at(seconds)
     new(seconds)
@@ -12,8 +13,7 @@ class TimeOfDay
   end
 
   def initialize(*args)
-    @seconds_since_midnight =
-      case args.size
+    seconds = case args.size
       when 1 # seconds since midnight
         args.first
       when 3 # hours, minutes, seconds
@@ -21,10 +21,12 @@ class TimeOfDay
       else
         raise ArgumentError, "wrong number of arguments (#{args.size} for 1 or 3)"
       end
+
+    @seconds_since_midnight = mod_by_day(seconds)
   end
 
   def +(seconds)
-    self.class.new(@seconds_since_midnight + seconds)
+    self.class.new(mod_by_day(@seconds_since_midnight + seconds))
   end
 
   def -(seconds)
@@ -75,4 +77,10 @@ class TimeOfDay
   alias_method :asctime, :to_s
   alias_method :ctime,   :to_s
   alias_method :inspect, :to_s
+
+  private
+
+  def mod_by_day(seconds)
+    seconds % SECONDS_PER_DAY
+  end
 end
