@@ -1,5 +1,5 @@
 # -*- encoding: utf-8 -*-
-require File.expand_path('../lib/time_of_day/version', __FILE__)
+require File.expand_path('../lib/time_of_day', __FILE__)
 
 Gem::Specification.new do |gem|
   gem.name          = 'time_of_day'
@@ -14,4 +14,7 @@ Gem::Specification.new do |gem|
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ['lib']
+
+  gem.add_development_dependency 'rake'
+  gem.add_development_dependency 'rspec'
 end
