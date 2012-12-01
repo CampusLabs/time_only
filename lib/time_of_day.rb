@@ -69,24 +69,32 @@ class TimeOfDay
       end
     end
 
-    format.gsub(/%[HkIlPpMSnt%]/) do |token|
+    format.gsub(/%-?[HkIlPpMSnt%]/) do |token|
       case token
       when '%H'
         zero_pad(hour)
       when '%k'
         blank_pad(hour)
+      when '%-H', '%-k'
+        hour
       when '%I'
         zero_pad(twelve_hour)
       when '%l'
         blank_pad(twelve_hour)
+      when '%-I', '%-l'
+        twelve_hour
       when '%P'
         am? ? 'am' : 'pm'
       when '%p'
         am? ? 'AM' : 'PM'
       when '%M'
         zero_pad(min)
+      when '%-M'
+        min
       when '%S'
         zero_pad(sec)
+      when '%-S'
+        sec
       when '%n'
         "\n"
       when '%t'

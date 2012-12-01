@@ -125,44 +125,88 @@ describe TimeOfDay do
   end
 
   describe '#strftime' do
+    context 'flags' do
+      context "- don't pad a numerical output" do
+        context 'hour' do
+          %w(H k I l).each do |directive|
+            context "using %#{directive}" do
+              it 'hour is one digit' do
+                expect(described_class.new(8, 0, 0).strftime("%-#{directive}")).to eq('8')
+              end
+
+              it 'hour is two digits' do
+                if directive == 'I' || directive == 'l'
+                  hour, hour_s = 13, '1'
+                else
+                  hour, hour_s = 12, '12'
+                end
+
+                expect(described_class.new(hour, 0, 0).strftime("%-#{directive}")).to eq(hour_s)
+              end
+            end
+          end
+        end
+
+        context 'min' do
+          it 'min is one digit' do
+            expect(described_class.new(0, 8, 0).strftime('%-M')).to eq('8')
+          end
+
+          it 'min is two digits' do
+            expect(described_class.new(0, 12, 0).strftime('%-M')).to eq('12')
+          end
+        end
+
+        context 'sec' do
+          it 'sec is one digit' do
+            expect(described_class.new(0, 0, 8).strftime('%-S')).to eq('8')
+          end
+
+          it 'sec is two digits' do
+            expect(described_class.new(0, 0, 12).strftime('%-S')).to eq('12')
+          end
+        end
+      end
+    end
+
     context 'directives' do
       context '%H - Hour of the day, 24-hour clock, zero-padded (00..23)' do
-        it 'hours are less than 10' do
+        it 'hour is one digit' do
           expect(described_class.new(8, 0, 0).strftime('%H')).to eq('08')
         end
 
-        it 'hours are greater than or equal to 10' do
+        it 'hour is two digits' do
           expect(described_class.new(12, 0, 0).strftime('%H')).to eq('12')
         end
       end
 
       context '%k - Hour of the day, 24-hour clock, blank-padded ( 0..23)' do
-        it 'hours are less than 10' do
+        it 'hour is one digit' do
           expect(described_class.new(8, 0, 0).strftime('%k')).to eq(' 8')
         end
 
-        it 'hours are greater than or equal to 10' do
+        it 'hour is two digits' do
           expect(described_class.new(12, 0, 0).strftime('%k')).to eq('12')
         end
       end
 
       context '%I - Hour of the day, 12-hour clock, zero-padded (01..12)' do
         context 'before 1pm' do
-          it 'hours are less than 10' do
+          it 'hour is one digit' do
             expect(described_class.new(8, 0, 0).strftime('%I')).to eq('08')
           end
 
-          it 'hours are greater than or equal to 10' do
+          it 'hour is two digits' do
             expect(described_class.new(12, 0, 0).strftime('%I')).to eq('12')
           end
         end
 
         context 'after or equal to 1pm' do
-          it 'hours are less than 10' do
+          it 'hour is one digit' do
             expect(described_class.new(13, 0, 0).strftime('%I')).to eq('01')
           end
 
-          it 'hours are greater than or equal to 10' do
+          it 'hour is two digits' do
             expect(described_class.new(22, 0, 0).strftime('%I')).to eq('10')
           end
         end
@@ -170,21 +214,21 @@ describe TimeOfDay do
 
       context '%l - Hour of the day, 12-hour clock, blank-padded ( 1..12)' do
         context 'before 1pm' do
-          it 'hours are less than 10' do
+          it 'hour is one digit' do
             expect(described_class.new(8, 0, 0).strftime('%l')).to eq(' 8')
           end
 
-          it 'hours are greater than or equal to 10' do
+          it 'hour is two digits' do
             expect(described_class.new(12, 0, 0).strftime('%l')).to eq('12')
           end
         end
 
         context 'after or equal to 1pm' do
-          it 'hours are less than 10' do
+          it 'hour is one digit' do
             expect(described_class.new(13, 0, 0).strftime('%l')).to eq(' 1')
           end
 
-          it 'hours are greater than or equal to 10' do
+          it 'hour is two digits' do
             expect(described_class.new(22, 0, 0).strftime('%l')).to eq('10')
           end
         end
@@ -211,21 +255,21 @@ describe TimeOfDay do
       end
 
       context '%M - Minute of the hour (00..59)' do
-        it 'minutes are less than 10' do
+        it 'min is one digit' do
           expect(described_class.new(0, 8, 0).strftime('%M')).to eq('08')
         end
 
-        it 'minutes are greater than or equal to 10' do
+        it 'min is two digits' do
           expect(described_class.new(0, 12, 0).strftime('%M')).to eq('12')
         end
       end
 
       context '%S - Second of the minute (00..60)' do
-        it 'seconds are less than 10' do
+        it 'sec is one digit' do
           expect(described_class.new(0, 0, 8).strftime('%S')).to eq('08')
         end
 
-        it 'seconds are greater than or equal to 10' do
+        it 'sec is two digits' do
           expect(described_class.new(0, 0, 12).strftime('%S')).to eq('12')
         end
       end
