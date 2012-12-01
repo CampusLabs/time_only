@@ -45,12 +45,20 @@ class TimeOfDay
     to_i <=> other.to_i
   end
 
+  def am?
+    hour < 12
+  end
+
   def hour
     @hour ||= @seconds_since_midnight / SECONDS_PER_HOUR
   end
 
   def min
     @min ||= (@seconds_since_midnight % SECONDS_PER_HOUR) / SECONDS_PER_MIN
+  end
+
+  def pm?
+    !am?
   end
 
   def sec
@@ -145,9 +153,5 @@ class TimeOfDay
 
   def blank_pad(number)
     number < 10 ? " #{number}" : number
-  end
-
-  def am?
-    hour < 12
   end
 end

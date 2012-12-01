@@ -106,6 +106,20 @@ describe TimeOfDay do
     end
   end
 
+  describe '#am?' do
+    context 'time is before noon' do
+      subject { described_class.new(2, 4, 6) }
+
+      its(:am?) { should be_true }
+    end
+
+    context 'time is after noon' do
+      subject { described_class.new(12, 4, 6) }
+
+      its(:am?) { should be_false }
+    end
+  end
+
   describe '#hour' do
     subject { described_class.new(2, 4, 6) }
 
@@ -116,6 +130,20 @@ describe TimeOfDay do
     subject { described_class.new(2, 4, 6) }
 
     its(:min) { should be 4 }
+  end
+
+  describe '#pm?' do
+    context 'time is before noon' do
+      subject { described_class.new(2, 4, 6) }
+
+      its(:pm?) { should be_false }
+    end
+
+    context 'time is after noon' do
+      subject { described_class.new(12, 4, 6) }
+
+      its(:pm?) { should be_true }
+    end
   end
 
   describe '#sec' do
