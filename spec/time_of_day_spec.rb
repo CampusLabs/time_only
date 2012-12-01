@@ -125,6 +125,141 @@ describe TimeOfDay do
   end
 
   describe '#strftime' do
+    context 'directives' do
+      context '%H - Hour of the day, 24-hour clock, zero-padded (00..23)' do
+        it 'hours are less than 10' do
+          expect(described_class.new(8, 0, 0).strftime('%H')).to eq('08')
+        end
+
+        it 'hours are greater than or equal to 10' do
+          expect(described_class.new(12, 0, 0).strftime('%H')).to eq('12')
+        end
+      end
+
+      context '%k - Hour of the day, 24-hour clock, blank-padded ( 0..23)' do
+        it 'hours are less than 10' do
+          expect(described_class.new(8, 0, 0).strftime('%k')).to eq(' 8')
+        end
+
+        it 'hours are greater than or equal to 10' do
+          expect(described_class.new(12, 0, 0).strftime('%k')).to eq('12')
+        end
+      end
+
+      context '%I - Hour of the day, 12-hour clock, zero-padded (01..12)' do
+        context 'before 1pm' do
+          it 'hours are less than 10' do
+            expect(described_class.new(8, 0, 0).strftime('%I')).to eq('08')
+          end
+
+          it 'hours are greater than or equal to 10' do
+            expect(described_class.new(12, 0, 0).strftime('%I')).to eq('12')
+          end
+        end
+
+        context 'after or equal to 1pm' do
+          it 'hours are less than 10' do
+            expect(described_class.new(13, 0, 0).strftime('%I')).to eq('01')
+          end
+
+          it 'hours are greater than or equal to 10' do
+            expect(described_class.new(22, 0, 0).strftime('%I')).to eq('10')
+          end
+        end
+      end
+
+      context '%l - Hour of the day, 12-hour clock, blank-padded ( 1..12)' do
+        context 'before 1pm' do
+          it 'hours are less than 10' do
+            expect(described_class.new(8, 0, 0).strftime('%l')).to eq(' 8')
+          end
+
+          it 'hours are greater than or equal to 10' do
+            expect(described_class.new(12, 0, 0).strftime('%l')).to eq('12')
+          end
+        end
+
+        context 'after or equal to 1pm' do
+          it 'hours are less than 10' do
+            expect(described_class.new(13, 0, 0).strftime('%l')).to eq(' 1')
+          end
+
+          it 'hours are greater than or equal to 10' do
+            expect(described_class.new(22, 0, 0).strftime('%l')).to eq('10')
+          end
+        end
+      end
+
+      context '%P - Meridian indicator, lowercase ("am" or "pm")' do
+        it 'hours are before noon' do
+          expect(described_class.new(8, 0, 0).strftime('%P')).to eq('am')
+        end
+
+        it 'hours are after noon' do
+          expect(described_class.new(13, 0, 0).strftime('%P')).to eq('pm')
+        end
+      end
+
+      context '%p - Meridian indicator, uppercase ("AM" or "PM")' do
+        it 'hours are before noon' do
+          expect(described_class.new(8, 0, 0).strftime('%p')).to eq('AM')
+        end
+
+        it 'hours are after noon' do
+          expect(described_class.new(13, 0, 0).strftime('%p')).to eq('PM')
+        end
+      end
+
+      context '%M - Minute of the hour (00..59)' do
+        it 'minutes are less than 10' do
+          expect(described_class.new(0, 8, 0).strftime('%M')).to eq('08')
+        end
+
+        it 'minutes are greater than or equal to 10' do
+          expect(described_class.new(0, 12, 0).strftime('%M')).to eq('12')
+        end
+      end
+
+      context '%S - Second of the minute (00..60)' do
+        it 'seconds are less than 10' do
+          expect(described_class.new(0, 0, 8).strftime('%S')).to eq('08')
+        end
+
+        it 'seconds are greater than or equal to 10' do
+          expect(described_class.new(0, 0, 12).strftime('%S')).to eq('12')
+        end
+      end
+    end
+
+    context 'literals' do
+      it '%n - Newline character (\n)' do
+        expect(described_class.at(0).strftime('%n')).to eq("\n")
+      end
+
+      it '%t - Tab character (\t)' do
+        expect(described_class.at(0).strftime('%t')).to eq("\t")
+      end
+
+      it '%% - Literal "%" character' do
+        expect(described_class.at(0).strftime('%%')).to eq('%')
+      end
+    end
+
+    context 'combinations' do
+      it '%r - 12-hour time (%I:%M:%S %p)' do
+        expect(described_class.new(1, 0, 12).strftime('%r')).to eq('01:00:12 AM')
+      end
+
+      it '%R - 24-hour time (%H:%M)' do
+        expect(described_class.new(1, 0, 12).strftime('%R')).to eq('01:00')
+      end
+
+      %w(X T).each do |combination|
+        it "%#{combination} - 24-hour time (%H:%M:%S)" do
+          expect(described_class.new(1, 0, 12).strftime("%#{combination}")).to eq('01:00:12')
+        end
+      end
+    end
   end
 
   describe '#succ' do
