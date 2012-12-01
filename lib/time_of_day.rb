@@ -57,6 +57,46 @@ class TimeOfDay
     @sec ||= @seconds_since_midnight % SECONDS_PER_MIN
   end
 
+  def strftime(format)
+    format.gsub!(/%[rRTX]/) do |token|
+      case token
+      when '%r'
+        '%I:%M:%S %p'
+      when '%R'
+        '%H:%M'
+      when '%T', '%X'
+        '%H:%M:%S'
+      end
+    end
+
+    format.gsub(/%[HkIlPpMSnt%]/) do |token|
+      case token
+      when '%H'
+        zero_pad(hour)
+      when '%k'
+        blank_pad(hour)
+      when '%I'
+        zero_pad(twelve_hour)
+      when '%l'
+        blank_pad(twelve_hour)
+      when '%P'
+        am? ? 'am' : 'pm'
+      when '%p'
+        am? ? 'AM' : 'PM'
+      when '%M'
+        zero_pad(min)
+      when '%S'
+        zero_pad(sec)
+      when '%n'
+        "\n"
+      when '%t'
+        "\t"
+      when '%%'
+        '%'
+      end
+    end
+  end
+
   def succ
     self + 1
   end
@@ -75,7 +115,7 @@ class TimeOfDay
   alias_method :tv_sec, :to_i
 
   def to_s
-    '%0.2d:%0.2d:%0.2d' % to_a
+    strftime('%T')
   end
   alias_method :asctime, :to_s
   alias_method :ctime,   :to_s
@@ -85,5 +125,21 @@ class TimeOfDay
 
   def mod_by_day(seconds)
     seconds % SECONDS_PER_DAY
+  end
+
+  def twelve_hour
+    hour > 12 ? hour % 12 : hour
+  end
+
+  def zero_pad(number)
+    number < 10 ? "0#{number}" : number
+  end
+
+  def blank_pad(number)
+    number < 10 ? " #{number}" : number
+  end
+
+  def am?
+    hour < 12
   end
 end
