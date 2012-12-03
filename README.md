@@ -1,6 +1,7 @@
 # TimeOfDay
 
-TODO: Write a gem description
+A simple class for handling time and only time. No dates, no time zones, just good old time of day.
+At the moment, TimeOfDay only supports resolution to 1 second.
 
 ## Installation
 

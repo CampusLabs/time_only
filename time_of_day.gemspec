@@ -4,8 +4,8 @@ require File.expand_path('../lib/time_of_day/version', __FILE__)
 Gem::Specification.new do |gem|
   gem.name          = 'time_of_day'
   gem.version       = TimeOfDay::VERSION
-  gem.summary       = 'Handles time within a day.'
-  gem.description   = gem.summary
+  gem.summary       = 'A simple class for handling time and only time.'
+  gem.description   = "#{gem.summary} No dates, no time zones, just good old time of day."
 
   gem.authors       = ['Aaron Lasseigne']
   gem.email         = ['aaron@orgsync.com']
