@@ -66,6 +66,8 @@ class TimeOfDay
   end
 
   def strftime(format)
+    format = format.dup
+
     format.gsub!(/%[rRTX]/) do |token|
       case token
       when '%r'
