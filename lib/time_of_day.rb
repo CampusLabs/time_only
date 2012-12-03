@@ -37,7 +37,7 @@ class TimeOfDay
   end
 
   def ==(other)
-    self.to_i == other.to_i
+    to_i == other.to_i
   end
   alias_method :eql?, :==
 
