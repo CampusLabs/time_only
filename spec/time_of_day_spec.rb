@@ -4,24 +4,40 @@ require 'time_of_day'
 
 describe TimeOfDay do
   describe '.new(args)' do
-    it 'accepts seconds since midnight' do
-      expect(described_class.new(45296).to_i).to eq(45296)
+    context 'one arg' do
+      it 'creates as the seconds since midnight' do
+        expect(described_class.new(45296).to_i).to eq(45296)
+      end
+
+      it "rolls over seconds that are greater than #{described_class::SECONDS_PER_DAY}" do
+        expect(described_class.new(described_class::SECONDS_PER_DAY * 2 + 1).to_i).to eq(1)
+      end
+
+      it 'handles negative seconds which rolls back' do
+        expect(described_class.new(-10).to_i).to eq(described_class::SECONDS_PER_DAY - 10)
+      end
     end
 
-    it 'accepts hours, minutes, seconds' do
-      expect(described_class.new(12, 34, 56).to_i).to eq(45296)
+    context 'three argss' do
+      it 'creates based on hours, minutes and seconds' do
+        expect(described_class.new(12, 34, 56).to_i).to eq(45296)
+      end
+
+      it 'raises an error when the hours arg is outside of 0 - 23' do
+        expect{ described_class.new(24, 0, 0) }.to raise_error(ArgumentError)
+      end
+
+      it 'raises an error when the minutes arg is outside of 0 - 59' do
+        expect{ described_class.new(0, 60, 0) }.to raise_error(ArgumentError)
+      end
+
+      it 'raises an error when the seconds arg is outside of 0 - 59' do
+        expect{ described_class.new(0, 0, 60) }.to raise_error(ArgumentError)
+      end
     end
 
     it 'raises an error when the wrong number of arguments is passed' do
       expect{ described_class.new(1, 2) }.to raise_error(ArgumentError)
-    end
-
-    it "rolls over seconds that are greater than #{described_class::SECONDS_PER_DAY}" do
-      expect(described_class.new(described_class::SECONDS_PER_DAY * 2 + 1).to_i).to eq(1)
-    end
-
-    it 'handles negative seconds which rolls back' do
-      expect(described_class.new(-10).to_i).to eq(described_class::SECONDS_PER_DAY - 10)
     end
   end
 

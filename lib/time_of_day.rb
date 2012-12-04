@@ -40,10 +40,16 @@ class TimeOfDay
   #   # => '13:24:56'
   def initialize(*args)
     seconds = case args.size
-      when 1 # seconds since midnight
+      when 1
         args.first
-      when 3 # hours, minutes, seconds
-        (args[0] * SECONDS_PER_HOUR) + (args[1] * SECONDS_PER_MIN) + args[2]
+      when 3
+        hours, minutes, seconds = args
+
+        raise ArgumentError, 'hours must be between 0 and 23'   if hours   < 0 || hours   > 23
+        raise ArgumentError, 'minutes must be between 0 and 59' if minutes < 0 || minutes > 59
+        raise ArgumentError, 'seconds must be between 0 and 59' if seconds < 0 || seconds > 59
+
+        (hours * SECONDS_PER_HOUR) + (minutes * SECONDS_PER_MIN) + seconds
       else
         raise ArgumentError, "wrong number of arguments (#{args.size} for 1 or 3)"
       end
