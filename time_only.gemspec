@@ -1,9 +1,9 @@
 # -*- encoding: utf-8 -*-
-require File.expand_path('../lib/time_of_day/version', __FILE__)
+require File.expand_path('../lib/time_only/version', __FILE__)
 
 Gem::Specification.new do |gem|
-  gem.name          = 'time_of_day'
-  gem.version       = TimeOfDay::VERSION
+  gem.name          = 'time_only'
+  gem.version       = TimeOnly::VERSION
   gem.summary       = 'A simple class for handling time and only time.'
   gem.description   = "#{gem.summary} No dates, no time zones, just good old time of day."
 

@@ -1,8 +1,8 @@
 require 'rspec'
 require 'timecop'
-require 'time_of_day'
+require 'time_only'
 
-describe TimeOfDay do
+describe TimeOnly do
   describe '.new(args)' do
     context 'one arg' do
       it 'creates as the seconds since midnight' do

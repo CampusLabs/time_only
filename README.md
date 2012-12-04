@@ -1,13 +1,13 @@
-# TimeOfDay
+# TimeOnly
 
 A simple class for handling time and only time. No dates, no time zones, just good old time of day.
-At the moment, `TimeOfDay` only supports resolution to 1 second.
+At the moment, `TimeOnly` only supports resolution to 1 second.
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
-    gem 'time_of_day'
+    gem 'time_only'
 
 And then execute:
 
@@ -15,15 +15,15 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install time_of_day
+    $ gem install time_only
 
 ## Usage
 
-`TimeOfDay` attempts to implement the same functionality as `Time` where it makes sense to do so.
+`TimeOnly` attempts to implement the same functionality as `Time` where it makes sense to do so.
 
-    require 'time_of_day'
+    require 'time_only'
     
-    time = TimeOfDay.new(8, 0, 2)
+    time = TimeOnly.new(8, 0, 2)
     # => '08:00:02'
     
     time.hour
@@ -38,13 +38,13 @@ Or install it yourself as:
     time.strftime('The time is %-l:%M:%S %P.')
     # => 'The time is 1:03:56 pm.'
     
-    # adding times rolls the time forward and returns a new TimeOfDay
-    TimeOfDay.new(23, 59, 59) + 3
+    # adding times rolls the time forward and returns a new TimeOnly
+    TimeOnly.new(23, 59, 59) + 3
     # => '00:00:02'
         
     morning_flights, afternoon_flights = departure_times.partition(&:am?)
     
-    current_time = TimeOfDay.now
+    current_time = TimeOnly.now
     
     # and many more...
     

@@ -1,17 +1,17 @@
-class TimeOfDay
+class TimeOnly
   include Comparable
 
   SECONDS_PER_MIN  = 60
   SECONDS_PER_HOUR = 60 * SECONDS_PER_MIN
   SECONDS_PER_DAY  = 24 * SECONDS_PER_HOUR
 
-  # Public: Initialize a TimeOfDay.
+  # Public: Initialize a TimeOnly.
   #
   # seconds - The Integer number of seconds since midnight.
   #
   # Examples
   #
-  #   TimeOfDay.at(4)
+  #   TimeOnly.at(4)
   #   # => '00:00:04'
   def self.at(seconds)
     new(seconds)
@@ -23,7 +23,7 @@ class TimeOfDay
     new(time.hour, time.min, time.sec)
   end
 
-  # Public: Initialize a TimeOfDay.
+  # Public: Initialize a TimeOnly.
   #
   # seconds - The Integer number of seconds since midnight.
   #   OR
@@ -33,10 +33,10 @@ class TimeOfDay
   #
   # Examples
   #
-  #   TimeOfDay.new(4)
+  #   TimeOnly.new(4)
   #   # => '00:00:04'
   #
-  #   TimeOfDay.new(13, 24, 56)
+  #   TimeOnly.new(13, 24, 56)
   #   # => '13:24:56'
   def initialize(*args)
     seconds = case args.size
@@ -64,13 +64,13 @@ class TimeOfDay
   #
   # Examples
   #
-  #   TimeOfDay.new(4) + 3
+  #   TimeOnly.new(4) + 3
   #   # => '00:00:07'
   #
-  #   TimeOfDay.new(23, 59, 59) + 3
+  #   TimeOnly.new(23, 59, 59) + 3
   #   # => '00:00:02'
   #
-  # Returns a new TimeOfDay.
+  # Returns a new TimeOnly.
   def +(seconds)
     self.class.new(mod_by_day(@seconds_since_midnight + seconds))
   end
@@ -82,13 +82,13 @@ class TimeOfDay
   #
   # Examples
   #
-  #   TimeOfDay.new(4) - 3
+  #   TimeOnly.new(4) - 3
   #   # => '00:00:01'
   #
-  #   TimeOfDay.new(0, 0, 0) - 3
+  #   TimeOnly.new(0, 0, 0) - 3
   #   # => '23:59:57'
   #
-  # Returns a new TimeOfDay.
+  # Returns a new TimeOnly.
   def -(seconds)
     self + (seconds * -1)
   end
@@ -159,10 +159,10 @@ class TimeOfDay
   #
   # Examples
   #
-  #   TimeOfDay.new(12, 34, 56).strftime('%r')
+  #   TimeOnly.new(12, 34, 56).strftime('%r')
   #   # => '12:34:56 PM'
   #
-  #   TimeOfDay.new(1, 3, 56).strftime('The time is %-l:%M:%S %P.')
+  #   TimeOnly.new(1, 3, 56).strftime('The time is %-l:%M:%S %P.')
   #   # => 'The time is 1:03:56 pm.'
   #
   # Returns the formatted String.
