@@ -5,6 +5,14 @@ class TimeOfDay
   SECONDS_PER_HOUR = 60 * SECONDS_PER_MIN
   SECONDS_PER_DAY  = 24 * SECONDS_PER_HOUR
 
+  # Public: Initialize a TimeOfDay.
+  #
+  # seconds - The Integer number of seconds since midnight.
+  #
+  # Examples
+  #
+  #   TimeOfDay.at(4)
+  #   # => '00:00:04'
   def self.at(seconds)
     new(seconds)
   end
@@ -15,6 +23,21 @@ class TimeOfDay
     new(time.hour, time.min, time.sec)
   end
 
+  # Public: Initialize a TimeOfDay.
+  #
+  # seconds - The Integer number of seconds since midnight.
+  #   OR
+  # hours   - The Integer number of hours.
+  # minutes - The Integer number of minutes.
+  # seconds - The Integer number of seconds.
+  #
+  # Examples
+  #
+  #   TimeOfDay.new(4)
+  #   # => '00:00:04'
+  #
+  #   TimeOfDay.new(13, 24, 56)
+  #   # => '13:24:56'
   def initialize(*args)
     seconds = case args.size
       when 1 # seconds since midnight
@@ -28,10 +51,38 @@ class TimeOfDay
     @seconds_since_midnight = mod_by_day(seconds)
   end
 
+  # Public: Add seconds to the time and return that as a new value. If the value
+  # exceeds the number of seconds in a day the time will roll forwardd.
+  #
+  # seconds - The Integer number of seconds.
+  #
+  # Examples
+  #
+  #   TimeOfDay.new(4) + 3
+  #   # => '00:00:07'
+  #
+  #   TimeOfDay.new(23, 59, 59) + 3
+  #   # => '00:00:02'
+  #
+  # Returns a new TimeOfDay.
   def +(seconds)
     self.class.new(mod_by_day(@seconds_since_midnight + seconds))
   end
 
+  # Public: Subtract seconds from the time and return that as a new value. If the
+  # value is less than zero seconds in a day the time will roll backwards.
+  #
+  # seconds - The Integer number of seconds.
+  #
+  # Examples
+  #
+  #   TimeOfDay.new(4) - 3
+  #   # => '00:00:01'
+  #
+  #   TimeOfDay.new(0, 0, 0) - 3
+  #   # => '23:59:57'
+  #
+  # Returns a new TimeOfDay.
   def -(seconds)
     self + (seconds * -1)
   end
@@ -65,6 +116,50 @@ class TimeOfDay
     @sec ||= @seconds_since_midnight % SECONDS_PER_MIN
   end
 
+  # Public: Formats time according to the directives in the given format string.
+  # The directives begins with a percent (%) character. Any text not listed as a
+  # directive will be passed through to the output string.)
+  #
+  # The directive consists of a percent (%) character, zero or more flags and a 
+  # conversion specifier as follows.
+  #
+  #   %<flags><conversion>
+  #
+  #  Flags:
+  #    - don't pad a numerical output
+  #
+  #  Directives:
+  #    %H - Hour of the day, 24-hour clock, zero-padded (00..23)
+  #    %k - Hour of the day, 24-hour clock, blank-padded ( 0..23)
+  #    %I - Hour of the day, 12-hour clock, zero-padded (01..12)
+  #    %l - Hour of the day, 12-hour clock, blank-padded ( 1..12)
+  #    %P - Meridian indicator, lowercase (``am' or ``pm')
+  #    %p - Meridian indicator, uppercase (``AM' or ``PM')
+  #    %M - Minute of the hour (00..59)
+  #    %S - Second of the minute (00..60)
+  #
+  #  Literal strings:
+  #    %n - Newline character (\n)
+  #    %t - Tab character (\t)
+  #    %% - Literal ``%'' character)
+  #
+  #  Combinations:
+  #    %X - Same as %T
+  #    %r - 12-hour time (%I:%M:%S %p)
+  #    %R - 24-hour time (%H:%M)
+  #    %T - 24-hour time (%H:%M:%S)
+  #
+  # format - The String containing directives.
+  #
+  # Examples
+  #
+  #   TimeOfDay.new(12, 34, 56).strftime('%r')
+  #   # => '12:34:56 PM'
+  #
+  #   TimeOfDay.new(1, 3, 56).strftime('The time is %-l:%M:%S %P.')
+  #   # => 'The time is 1:03:56 pm.'
+  #
+  # Returns the formatted String.
   def strftime(format)
     format = format.dup
 
